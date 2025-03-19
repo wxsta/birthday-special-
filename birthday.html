@@ -12,24 +12,22 @@
             text-align: center;
             margin: 0;
             padding: 40px 0; /* 增加顶部和底部的内边距 */
-            overflow: hidden;
-            position: relative;
+            overflow-y: auto; /* 允许垂直滚动 */
         }
         .cake {
             position: absolute;
-            bottom: 0;
+            bottom: 20px; /* 调整底部蛋糕的位置 */
             left: 50%;
             transform: translateX(-50%);
-            width: 200px;
+            width: 150px; /* 适当缩小蛋糕尺寸 */
             z-index: 1;
         }
         .container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 20px 20px 40px 20px; /* 减小底部内边距 */
             position: relative;
             z-index: 2;
-            padding-bottom: 100px; /* 增加底部内边距以防遮挡 */
         }
         h1 {
             font-size: 3rem;
@@ -55,6 +53,7 @@
             border-radius: 15px;
             padding: 15px;
             width: 100%;
+            position: relative;
         }
         .photo-grid img {
             scroll-snap-align: start;
@@ -76,10 +75,15 @@
             background: rgba(255, 255, 255, 0.1);
             padding: 20px;
             border-radius: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 20px; /* 减小底部边距 */
+            position: relative;
+            z-index: 3;
         }
         .music-player {
-            margin-top: 20px;
+            margin-top: 10px;
+            margin-bottom: 0; /* 移除底部边距 */
+            position: relative;
+            z-index: 3;
         }
         .cake-animation {
             position: absolute;
@@ -91,57 +95,203 @@
             50% { transform: translateY(-10px); }
             100% { transform: translateY(0); }
         }
-        /* 动态小蛋糕样式 */
-        .birthday-cake {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            background: #f8c471; /* 蛋糕底色 */
+        /* 修改动态蛋糕样式 */
+        .birthday-cake-left, .birthday-cake-right {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            background: #f8c471;
             border-radius: 10px;
-            margin: 0 auto;
-            animation: float 3s ease-in-out infinite; /* 动画效果 */
+            animation: float 3s ease-in-out infinite;
+            z-index: 10;
         }
-        .birthday-cake:before {
+
+        .birthday-cake-left {
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .birthday-cake-right {
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            animation-delay: 1.5s; /* 错开动画时间 */
+        }
+
+        .birthday-cake-left:before, .birthday-cake-right:before {
             content: '';
             position: absolute;
-            top: -20px;
-            left: 10px;
-            width: 80px;
-            height: 20px;
-            background: #f39c12; /* 蛋糕顶部颜色 */
+            top: -15px;
+            left: 5px;
+            width: 50px;
+            height: 15px;
+            background: #f39c12;
             border-radius: 10px;
         }
-        .candle {
+
+        .candle-left, .candle-right {
             position: absolute;
             width: 5px;
             height: 20px;
-            background: #e74c3c; /* 蜡烛颜色 */
+            background: #e74c3c;
             left: 50%;
             transform: translateX(-50%);
             top: -20px;
         }
-        .flame {
+
+        .flame-left, .flame-right {
             position: absolute;
             width: 10px;
             height: 10px;
-            background: #f1c40f; /* 火焰颜色 */
+            background: #f1c40f;
             border-radius: 50%;
             left: 50%;
             transform: translateX(-50%);
             top: -30px;
-            animation: flicker 0.5s infinite alternate; /* 火焰闪烁效果 */
+            animation: flicker 0.5s infinite alternate;
         }
+
+        .flame-right {
+            animation-delay: 0.25s; /* 错开火焰闪烁时间 */
+        }
+
+        @keyframes float {
+            0% { transform: translateY(-50%) scale(1); }
+            50% { transform: translateY(-60%) scale(1.05); }
+            100% { transform: translateY(-50%) scale(1); }
+        }
+
         @keyframes flicker {
-            0% { transform: translateX(-50%) scale(1); }
-            100% { transform: translateX(-50%) scale(1.2); }
+            0% { 
+                transform: translateX(-50%) scale(1);
+                box-shadow: 0 0 8px #f1c40f;
+            }
+            100% { 
+                transform: translateX(-50%) scale(1.2);
+                box-shadow: 0 0 12px #f1c40f;
+            }
+        }
+        .cake {
+            display: none; /* 移除底部的装饰蛋糕 */
+        }
+        /* 修改烟花动画样式 */
+        .firework {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            animation: explode 1.2s ease-out forwards;
+            box-shadow: 0 0 10px 2px currentColor; /* 添加发光效果 */
+        }
+        
+        @keyframes explode {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0.1);
+                opacity: 0;
+            }
+        }
+
+        /* 添加烟花尾迹效果 */
+        .particle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            animation: trail 0.6s ease-out forwards;
+        }
+
+        @keyframes trail {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* 添加图片轮播相关样式 */
+        .photo-controls {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .photo-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .photo-dot.active {
+            background: #ffffff;
+        }
+        
+        .photo-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            z-index: 2;
+        }
+        
+        .photo-prev {
+            left: 10px;
+        }
+        
+        .photo-next {
+            right: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="birthday-cake">
-            <div class="candle">
-                <div class="flame"></div>
+        <div class="birthday-cake-left">
+            <div class="candle-left">
+                <div class="flame-left"></div>
+            </div>
+        </div>
+        <div class="birthday-cake-right">
+            <div class="candle-right">
+                <div class="flame-right"></div>
             </div>
         </div>
         <h1>🎉 雷壹涵，生日快乐！ 🎂</h1>
@@ -274,6 +424,205 @@
         loadImages();
         const interval = setInterval(updateCountdown, 1000);
         updateCountdown();
+
+        /* 修改 JavaScript 中的烟花生成函数 */
+        function createFirework(x, y) {
+            const firework = document.createElement('div');
+            firework.className = 'firework';
+            document.body.appendChild(firework);
+            
+            // 更丰富的颜色数组
+            const colors = [
+                '#ff0000', '#00ff00', '#0000ff', '#ffff00', 
+                '#ff00ff', '#00ffff', '#ff8800', '#ff0088',
+                '#8800ff', '#88ff00', '#00ff88', '#0088ff'
+            ];
+            
+            // 增加粒子数量到50个
+            const particles = 50;
+            
+            // 创建多层烟花效果
+            for (let layer = 0; layer < 2; layer++) {
+                for (let i = 0; i < particles; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    
+                    // 随机角度和速度
+                    const angle = (i / particles) * Math.PI * 2 + (Math.random() * 0.5);
+                    const velocity = 100 + Math.random() * 100; // 增加速度范围
+                    
+                    // 计算粒子轨迹
+                    const tx = Math.cos(angle) * velocity * (1 + layer * 0.5);
+                    const ty = Math.sin(angle) * velocity * (1 + layer * 0.5);
+                    
+                    // 设置粒子样式
+                    particle.style.left = x + 'px';
+                    particle.style.top = y + 'px';
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    particle.style.backgroundColor = color;
+                    particle.style.color = color; // 用于发光效果
+                    particle.style.setProperty('--tx', tx + 'px');
+                    particle.style.setProperty('--ty', ty + 'px');
+                    
+                    // 添加随机延迟
+                    particle.style.animationDelay = Math.random() * 0.2 + 's';
+                    
+                    firework.appendChild(particle);
+                }
+            }
+            
+            // 清理烟花元素
+            setTimeout(() => {
+                document.body.removeChild(firework);
+            }, 1500); // 增加持续时间
+        }
+
+        // 随机生成烟花的位置更自然
+        function randomFireworks() {
+            const x = Math.random() * (window.innerWidth * 0.8) + (window.innerWidth * 0.1);
+            const y = Math.random() * (window.innerHeight * 0.6) + (window.innerHeight * 0.2);
+            createFirework(x, y);
+        }
+        
+        // 调整烟花生成频率
+        setInterval(randomFireworks, 1500); // 更频繁的烟花
+        
+        // 点击生成多个烟花
+        document.addEventListener('click', (e) => {
+            // 在点击位置生成3个大小不同的烟花
+            for(let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    createFirework(
+                        e.clientX + (Math.random() * 50 - 25),
+                        e.clientY + (Math.random() * 50 - 25)
+                    );
+                }, i * 100);
+            }
+        });
+
+        // 添加轮播功能的脚本
+        function initializePhotoSlider() {
+            const photoGrid = document.querySelector('.photo-grid');
+            const images = photoGrid.querySelectorAll('img');
+            let currentIndex = 0;
+            let autoPlayInterval;
+            
+            // 创建导航按钮
+            const prevButton = document.createElement('button');
+            prevButton.className = 'photo-nav photo-prev';
+            prevButton.innerHTML = '←';
+            
+            const nextButton = document.createElement('button');
+            nextButton.className = 'photo-nav photo-next';
+            nextButton.innerHTML = '→';
+            
+            // 创建底部指示点
+            const dotsContainer = document.createElement('div');
+            dotsContainer.className = 'photo-controls';
+            
+            // 添加到DOM
+            photoGrid.appendChild(prevButton);
+            photoGrid.appendChild(nextButton);
+            photoGrid.appendChild(dotsContainer);
+            
+            // 创建指示点
+            images.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = 'photo-dot';
+                if (index === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => showImage(index));
+                dotsContainer.appendChild(dot);
+            });
+            
+            // 显示指定索引的图片
+            function showImage(index) {
+                currentIndex = index;
+                const scrollAmount = index * (images[0].offsetWidth + 20); // 20是图片间距
+                photoGrid.scrollTo({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
+                
+                // 更新指示点状态
+                document.querySelectorAll('.photo-dot').forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+            }
+            
+            // 自动播放
+            function startAutoPlay() {
+                stopAutoPlay();
+                autoPlayInterval = setInterval(() => {
+                    currentIndex = (currentIndex + 1) % images.length;
+                    showImage(currentIndex);
+                }, 3000); // 每3秒切换一次
+            }
+            
+            function stopAutoPlay() {
+                if (autoPlayInterval) {
+                    clearInterval(autoPlayInterval);
+                }
+            }
+            
+            // 事件监听
+            prevButton.addEventListener('click', () => {
+                currentIndex = (currentIndex - 1 + images.length) % images.length;
+                showImage(currentIndex);
+            });
+            
+            nextButton.addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % images.length;
+                showImage(currentIndex);
+            });
+            
+            // 鼠标进入停止自动播放，移出恢复
+            photoGrid.addEventListener('mouseenter', stopAutoPlay);
+            photoGrid.addEventListener('mouseleave', startAutoPlay);
+            
+            // 开始自动播放
+            startAutoPlay();
+            
+            // 监听滚轮事件
+            photoGrid.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const delta = Math.sign(e.deltaY);
+                currentIndex = (currentIndex + delta + images.length) % images.length;
+                showImage(currentIndex);
+            });
+        }
+
+        // 在图片加载完成后初始化轮播
+        function loadImages() {
+            const imageCount = 5;
+            const photoGrid = document.querySelector('.photo-grid');
+            let loadedImages = 0;
+            
+            for (let i = 1; i <= imageCount; i++) {
+                const img = document.createElement('img');
+                img.src = `images/pingpong${i}.jpg`;
+                img.alt = `乒乓球照片 ${i}`;
+                
+                img.onload = () => {
+                    loadedImages++;
+                    if (loadedImages === imageCount) {
+                        initializePhotoSlider();
+                    }
+                };
+                
+                img.onerror = () => {
+                    img.src = 'https://source.unsplash.com/400x300/?birthday';
+                    loadedImages++;
+                    if (loadedImages === imageCount) {
+                        initializePhotoSlider();
+                    }
+                };
+                
+                photoGrid.appendChild(img);
+            }
+        }
+
+        // 初始化
+        loadImages();
     </script>
 </body>
 </html> 
