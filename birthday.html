@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日快乐！</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 40px 0; /* 增加顶部和底部的内边距 */
+            overflow: hidden;
+            position: relative;
+        }
+        .cake {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            z-index: 1;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+            padding-bottom: 100px; /* 增加底部内边距以防遮挡 */
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #ff6b6b, #ffa5a5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .countdown {
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+        .photo-grid {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            width: 100%;
+        }
+        .photo-grid img {
+            scroll-snap-align: start;
+            flex: 0 0 auto;
+            width: 100%;
+            height: auto;
+            max-width: 200px;
+            margin-right: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+        .photo-grid img:hover {
+            transform: scale(1.05);
+        }
+        .wishes {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .music-player {
+            margin-top: 20px;
+        }
+        .cake-animation {
+            position: absolute;
+            left: -100px; /* 调整位置 */
+            animation: float 3s ease-in-out infinite; /* 动画效果 */
+        }
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+        /* 动态小蛋糕样式 */
+        .birthday-cake {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            background: #f8c471; /* 蛋糕底色 */
+            border-radius: 10px;
+            margin: 0 auto;
+            animation: float 3s ease-in-out infinite; /* 动画效果 */
+        }
+        .birthday-cake:before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 10px;
+            width: 80px;
+            height: 20px;
+            background: #f39c12; /* 蛋糕顶部颜色 */
+            border-radius: 10px;
+        }
+        .candle {
+            position: absolute;
+            width: 5px;
+            height: 20px;
+            background: #e74c3c; /* 蜡烛颜色 */
+            left: 50%;
+            transform: translateX(-50%);
+            top: -20px;
+        }
+        .flame {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #f1c40f; /* 火焰颜色 */
+            border-radius: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            top: -30px;
+            animation: flicker 0.5s infinite alternate; /* 火焰闪烁效果 */
+        }
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1); }
+            100% { transform: translateX(-50%) scale(1.2); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="birthday-cake">
+            <div class="candle">
+                <div class="flame"></div>
+            </div>
+        </div>
+        <h1>🎉 雷壹涵，生日快乐！ 🎂</h1>
+        <p>初识你名，久居我心，人间有趣，因为有你。祝你快乐，不止生日！ 🎂</p>
+        
+        <div class="countdown">
+            距离你的生日还有0天0时0分0秒：<span id="countdown"></span>
+        </div>
+        
+        <div style="display: flex; align-items: center; justify-content: center;">
+            <video controls width="250" style="margin-right: 40px;">
+                <source src="mv/小沈阳-邵帅-你是人间四月天 (Live)(高清).mp4" type="video/mp4">
+                您的浏览器不支持视频播放。
+            </video>
+            
+            <div class="photo-grid" style="padding: 20px; max-width: 400px;">
+                <!-- 图片将由JavaScript动态加载 -->
+            </div>
+            
+            <video controls width="250" style="margin-left: 40px;">
+                <source src="mv/综艺少女嘟可爱-黄明昊(高清).mp4" type="video/mp4">
+                您的浏览器不支持视频播放。
+            </video>
+        </div>     
+        <div class="wishes">
+            <p>在这个特别的日子里，愿你被幸福包围，被快乐拥抱，被爱环绕！</p>
+            <p>愿你的每一天都如今天般灿烂，愿你的每一个梦想都能实现！</p>
+            <p>愿你三冬暖，愿你春不寒；愿你天黑有灯，愿你下雨有伞；愿你一路上，有良人相伴。</p>
+            <p>愿你所爱之人，挚爱你一人，愿你往后路途，深情不再枉付</p>
+            <p>🎈 生日快乐！ 🎁</p>
+        </div>
+        
+        <div class="music-player">
+            <audio controls autoplay loop>
+                <source src="birthday.mp3" type="audio/mpeg">
+                您的浏览器不支持音频播放。
+            </audio>
+        </div>
+        
+        <img class="cake" src="https://i.imgur.com/3QZQZ.png" alt="生日蛋糕">
+    </div>
+
+    <script>
+        // 设置生日日期
+        const birthday = new Date("2024-12-25T00:00:00");
+
+        // 动态加载图片
+        const photoGrid = document.querySelector('.photo-grid');
+        const unsplashAccessKey = 'YOUR_UNSPLASH_ACCESS_KEY'; // 替换为你的Unsplash Access Key
+        const unsplashUrl = `https://api.unsplash.com/photos/random?query=birthday&count=3&client_id=${unsplashAccessKey}`;
+
+        async function loadImages() {
+            // 加载指定的图片
+            const imageCount = 5; // 加载的图片数量
+            for (let i = 1; i <= imageCount; i++) {
+                const img = document.createElement('img');
+                img.src = `images/pingpong${i}.jpg`; // 加载 pingpong1.jpg 到 pingpong5.jpg
+                img.alt = `乒乓球照片 ${i}`;
+                img.onerror = () => {
+                    img.src = 'https://source.unsplash.com/400x300/?birthday'; // 备用图片
+                };
+                photoGrid.appendChild(img);
+            }
+        }
+
+        // 图片轮播功能
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        photoGrid.addEventListener('mousedown', (e) => {
+            isDown = true;
+            startX = e.pageX - photoGrid.offsetLeft;
+            scrollLeft = photoGrid.scrollLeft;
+        });
+
+        photoGrid.addEventListener('mouseleave', () => {
+            isDown = false;
+        });
+
+        photoGrid.addEventListener('mouseup', () => {
+            isDown = false;
+        });
+
+        photoGrid.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - photoGrid.offsetLeft;
+            const walk = (x - startX) * 2; // 滚动速度
+            photoGrid.scrollLeft = scrollLeft - walk;
+        });
+
+        // 触摸屏支持
+        photoGrid.addEventListener('touchstart', (e) => {
+            isDown = true;
+            startX = e.touches[0].pageX - photoGrid.offsetLeft;
+            scrollLeft = photoGrid.scrollLeft;
+        });
+
+        photoGrid.addEventListener('touchend', () => {
+            isDown = false;
+        });
+
+        photoGrid.addEventListener('touchmove', (e) => {
+            if (!isDown) return;
+            const x = e.touches[0].pageX - photoGrid.offsetLeft;
+            const walk = (x - startX) * 2;
+            photoGrid.scrollLeft = scrollLeft - walk;
+        });
+
+        function updateCountdown() {
+            const now = new Date();
+            const diff = birthday - now;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById("countdown").innerHTML = 
+                `${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒`;
+
+            if (diff < 0) {
+                clearInterval(interval);
+                document.getElementById("countdown").innerHTML = "生日快乐！";
+            }
+        }
+
+        // 初始化
+        loadImages();
+        const interval = setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+</body>
+</html> 
